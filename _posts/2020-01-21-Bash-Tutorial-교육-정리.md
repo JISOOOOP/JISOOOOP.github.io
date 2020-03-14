@@ -1,0 +1,370 @@
+---
+layout: post
+title:  "Bash Tutorial 교육 정리"
+date:   2020-01-21 14:40:00
+categories: study review bash
+---
+
+# Bash tutorial
+
+- Unix shell
+  - kernel을 둘러싸고 있는 껍데기
+  - 사용자가 제어할 수 있는 명령행 해석기
+  - MS 윈도우즈로 치면 DOS 환경 또는 커맨드 창
+- 커서 이동
+  - 문장의 맨 처음 / 끝
+    - Ctrl-a /Ctrl-e
+  - 단어단위 이동
+    - Ctrl-방향키
+- 화면 제어
+  - 화면 정리
+    - Ctrl - L
+  - 스크롤 중단 및 재개
+    - Ctrl-s / Ctrl-q
+- 서버 접속 및 종료
+  - 접속
+    - rlogin -l 아이디 호스트명
+      - 신뢰 구간에서는 회사내에서 이거 사용함
+  - 종료
+    - logout / exit
+  - 조회
+    - last
+- 기본 명령
+  - pwd
+    - 현재 디렉토리를 확인하는 명령
+  - id
+    - 자신의 로그인 아이디 확인
+  - uname
+    - 현재 접속해있는 유닉스 서버의 이름/OS 정보를 확인
+    - -a
+    - 비슷한 명령 : hostname
+  - echo
+    - 문자열을 출력하는 명령
+    - echo "hello"
+    - echo -n "hello world"; echo "java coffee"
+    - (-n : 뉴라인 없애는 옵션, ; : 문장 구분)
+    - "" 없어도 됨
+  - ls
+    - 디렉토리와 파일의 목록 출력
+    - 윈도우즈 cmd의 dir
+    - 옵션으로 경로 지정시 그 안의 내용물 볼수 있음
+    - -a(숨김포함 모든 파일)
+    - -t(생성된 시간의 역순으로 출력)
+- Globbing & Wildcard
+  - Glob pattern
+    - 매칭하기 위한 패턴을 표현하는데 쓰임
+    - 임의의 길이를 가지는 문자열 (*)
+    - 임의의 한 글자(?)
+    - 글자 집합([abcw-z])
+- 파일 시스템
+  - File
+    - OS에서 데이터를 디스크와 같은 저장소에 저장해 둘 떄의 단위
+    - 넓은 의미에서는 일반 파일, 디렉토리와 각종 입출력 장치를 모두 파일로 간주
+  - Directory
+    - 파일을 담아두는 공간(폴더)
+    - 디렉토리 안에 디렉토리를 담을 수 있기 떄문에 트리 구조로 형상
+  - 디렉토리 이동
+    - cd /var/log(Path) 
+  - 사용자 홈 디렉토리
+    - cd ~/.vim : 홈 디렉토리의 vim으로 간다
+  - 특정 사용자의 홈 디렉토리
+    - ls ~nemon (nemon의 홈 디렉토리로 이동)
+  - 조회
+    - history
+  - 12번 명령 재실행
+    - !12와 같이
+  - 커맨드 prefix로 재실행
+    - !find
+  - 바로 직전 명령 재실행
+    - !!
+  - 바로 직전 명령의 마지막 argument
+    - !$ ($의 의미는 유닉스에서 맨 뒤라는 의미, 반대는 ^)
+  - 직전 명령 편집
+    - echo hello world
+    - ^hello^java (hello를 java로 바꾼다)
+- 파일을 다루는 기본 명령
+  - touch
+    - 빈 파일 만들기
+  - 디렉토리 관련 명령
+    - mkdir (디렉토리 생성)
+    - rmdir (디렉토리 삭제)
+      - 비어있는 디렉토리만 삭제
+  - cp
+    - 복사
+    - cp test1.txt test2.txt (test1에서 test2)
+    - cp -r mydir1 mydir2 
+    - 마지막 매개변수가 디렉토리면 여러개(파일을) 기재 가능
+  - mv
+    - 옮기기
+    - mv test1 test2
+    - mv mydir1 mydir2
+    - 대상 파일이 이미 존재하면 error
+  - rm
+    - 제거
+    - rm -f test2.txt (-f : 강제로 삭제)
+    - rm -rf mydir2 (-r : 비어있지 않은 디렉토리 삭제)
+  - file
+    - 파일의 종류를 판단하는 명령
+    - file fileName
+  - 입력 하다가 tab 누르면 자동 완성이 된다.
+- 변수
+  - 사용자 변수
+    - 보통 소문자로 명명
+    - x=1
+    - x="helllo"
+    - = 주위에 공백이 없음 (주의 사항)
+  - 값 꺼내서 쓰기
+    - echo x (x 출력)
+    - echo $x (값 꺼내서 출력)
+    - echo ${x} (위와 같지만 이렇게 쓰는거 추천)
+  - Quotation
+    - single quote as literal
+    - ''는 변수 해석이 안됨
+    - ""는 변수 해석이 됨
+- Evaluation
+  - 명령 실행 결과를 문자열 변수로 대입
+    - $()로 둘러싸기
+    - date_str=$(date +"%Y%m%d")
+  - 명령 문자열을 실행하기
+    - eval 명령문자열
+    - cmd="ls -alF"
+    - eval $cmd
+  - Arithmetic
+    - a=13
+    - b=$((a % 3))
+    - i=$((2 ** 60)) (2의 60승)
+    - echo $RANDOM (랜덤 값 꺼내쓸때)
+- Type
+  - read-only
+    - declare -r var1=1
+    - var1=2
+  - integer
+    - declare -i n=3
+  - array
+    - declare -a arr=()
+  - function
+- 환경 변수
+  - 환경
+    - 프로세스를 둘러싼 주변 정보
+    - env
+  - exporting
+    - sub-shell에서 상속받아 사용할 수 있도록 변수를 공개
+    - 사용자 변수를 환경 변수로 전환
+    - export나 declare -x로 지정
+    - 상위 shell에서의 값을 하위 shell에서 사용 가능
+    - 하위 shell에서 값 변경은 상위 shell에 반영되지 않음
+  - 주요 환경변수
+    - PATH 에 들어있어야만 찾아가서 실행 가능
+  - 개발자에게 유용한 환경변수
+    - SHLVL shell의 레벨 확인
+    - PPID 부모 프로세스의 아이디
+    - SECONDS 실행한지 얼마나 지났나
+    - TMOUT 입력을 안하면 자동 로그아웃
+- File Permission
+  - ls -al로 확인 가능
+  - 앞쪽의 rwxr... 쪽 부분이 권한
+  - 1 / 3 / 3 / 3 = type / owner / group / others의 권한
+  - umask
+    - 파일에 부여되는 permission의 초기값에서 제외할 권한 지정
+      - umask 0027
+  - 소유자 변경하기
+    - chown 소유자아이디 파일
+- 제어문
+  - Boolean expression
+    - &&, ||, !, -a(AND), -o(OR)
+    - (( 0 && 1)) && echo true || echo false (만족하면 true, 아니면 false)
+  - Comparison operator
+    - integer
+      -  -eq -ne -gt -ge -li -le
+    - string
+      - < <= > >= == = != -z(zero lenth?) -n(null?)
+    - File Test
+      - -e (exist?)
+      - -s (size not zero?)
+      - -f / -d / -p / -l (file, directory, pipe, symlink?)
+      - -r / -w / -x / -u / -g / -k (permission?)
+    - if
+      - if [ 조건 ]; then
+      - 실행문
+      - fi
+      - 띄어쓰기 주의 !
+    - 한 줄 쓰기
+      - ;으로 이어붙이면 가능
+    - 주의 사항
+      - -eq 연산자는 정수 연산자
+      - ==, = 연산자는 문자열 연산자
+      - 변수가 정의되지 않았거나 공백을 포함할 수 있으므로 quotation 필요
+        - x="he llo"
+        - if [ "$x" == "he llo" ]; then ......
+    - while
+      - while [ 조건 ]; do
+      - 실행문
+      - done
+    - 무한 루프
+      - while :; do
+        - date
+        - sleep 5
+      - done
+    - for
+      - for 변수명in 리스트; do
+        - 실행문
+      - done
+      - for dir in *; do
+        - [ -d "$dir" ] && (echo "$dir"; cd "$dir"; ls -l | wc -l)
+      - done
+    - switch-case도 있다.
+    - break
+    - continue
+- 입출력 리다이렉트
+  - 표준 입력 - 0번
+    - 키보드 입력이 프로세스로 들어가는 통로
+  - 표준 출력 - 1번
+    - 프로세스가 출력한 내용이 화면으로 나오는 통로
+  - 표준 에러 - 2번
+    - 프로세스에서 발생한 에러가 화면으로 나오는 통로
+  - input redirect
+    - sort < in.txt(파일명)
+  - output redirect
+    - ls / askjfk > out.txt(파일명)
+    - more / less는 페이지 단위로 포여줌
+- 필터
+  - 프로세스의 출력을 가로채서 다른 프로세스의 입력으로 전달
+    - 파이프(|) 기호를 이용
+    - ls | head
+    - cat test.txt | sort | uniq -c | sort -n
+  - 특정 단계에서 발생하는 에러도 잡고 싶다면?
+- 파일 내용 보기
+  - cat / more
+  - grep
+  - which grep
+  - 파일의 앞쪽 이부만 보기
+    - head -10 test.txt
+  - 파일의 뒤쪽 일부만 보기
+    - tail -5 test1.txt
+    - tail -f /var/log/lastlog
+- 파일에서 문자열 찾기
+  - 찾기
+    - grep 문자열 파일
+    - grep "export" /etc/profile
+    - -r 옵션은 리커시브하게 디렉토리 안에 있는 것들 모두
+  - 잘라내서 쓰기
+    - cut -d 구분자 -f 필드번호 파일
+    - cut은 한 라인에서 구분자를 이용해 자른다음 몇번쨰 필드를 쓰겠다.
+- Alias
+  - 별명, 내가 자주쓰는 명령이 길어서 자주 갔다쓰는 명령 명명
+  - alias grep="egrep"
+  - alias diffs="diff -ignore-all-space"
+- 함수
+  - function과 subroutine을 구분하지 않음
+    - function func2 { return $(($1 + $2)); }
+    - func2 3 4
+    - echo $?
+    - 함수의 리턴값을 보는 것이 아니고 커맨드의 실행 결과를 본다?
+  - 변수는 기본적으로 전역
+  - 한수 내부에서만 사용하려면 local로 지정해야 함
+    - function test1(){
+      - local int_val=3
+      - str_val="value of global variable"
+    - }
+- Script File
+  - shebang
+    - 첫 줄에 기재해야 하는 것
+    - #! : 어떤 인터프리터 프로그램을 사용할 것 인가를 지정
+    - #!/bin/bash
+    - #!/usr/bin/env python : 권장하는 방식, 환경변수에 있는 파이썬 쓸꺼야
+    - #!/bin/awk -f : 옵션을 붙여야 할 경우 env를 사용할 수 없음
+  - 파일 작성(test.sh)
+    - chmod a+x test.sh 
+    - ./test.sh
+  - command-line arguments : $1 $2 $3 ...
+  - exit status : $?
+  - function의 매개변수와 동일하게
+- Job Control
+  - Foreground job
+    - 기본적으로 프로그램은 여기서 실행
+    - 한 명령의 실행이 끝날 때 까지 다음 명령을 기다려야함
+  - Background job
+    - &를 붙여서 실행하면 background 에서 실행됨
+    - 다음 명령을 바로 실행하거나 프롬프트가 뜸
+  - sleep 500 &(& : background에서 실행한다는 의미)
+  - Ctrl-z
+  - fg %# : foreground로 불러옴
+- 사용자 설정
+  - Bourne shell
+    - ~/.profile
+  - Bass
+    - login shell
+      - .bashrc(로그인 할때 동작하는 것은 여기에)
+      - 변경 후에 바로 동작 하는 것이 아니라 적용 해줘야함
+      - source ~/.bashrc
+    - non-login shell
+      - .bash_profile (로그인 안해도 동작해야 하는 것은 여기에)ㅌ	
+- 추천 설정
+  - 자료 참고
+- 자주 사용하는 명령
+  - 파일 경로 다루기
+    - 디렉토리 이름 구하기
+      - dirname/usr/local/share/doc/foo.txt
+    - 파일 이름 구하기
+      - basename 
+  - 화면 청소하기 : clear
+  - 실행 가능한 프로그램 확인
+    - which
+      - which python
+      - PATH 환경 변수에 포함되어야 탐색 가능
+  - locale : 지역 특성에 따르는 언어 통화 같은 포괄적인것
+  - iconv : 파일의 인코딩을 바꾸는 컨버젼 툴
+  - 정렬과 카운팅
+    - sort
+    - uniq : 인접한 행의 중복 제거
+    - wc : 행/열/문자 수 세기, -l, -w, -c 옵션으로 각각도 볼수 있음
+    - 자주 쓰는 조합
+      - cur -d: -f7 /PATH | sort -u(uniq) | wc -l
+      - grep -v(제외해줘) "^#"(#으로 시작하는것) /PATH | cut -d'.' -f1 | sort | uniq -c | sort -n
+      - sort | uniq | sort 패턴을 많이 사용함
+    - 파일 탐색
+      - find 디렉토리 목록 -name 이름패턴 - type 파일유형
+    - 입력을 개별 처리하기
+      - for 반복문은 공백이 포함된 입력을 처리하기 곤란
+      - xargs를 이용하여 행 단위로 처리하기
+        - xargs 명령
+        - xargs -I % 명령 "%"
+        - find /etc/init | xargs wc -l
+        - find /etc/init | xargs -I % wc -l "%"
+    - 다른 사용자로 변경
+      - su user
+      - sudo apps/httpd/bin/apachectl start
+      - 루트로 접근하기 위해 사용?
+    - 접속 패스워드 변경하기
+      - passwd
+      - kpasswd
+    - 원격 제어
+      - rsh-l 로그인id 호스트면 "명령"
+    - 파일 묶기
+      - 여러 파일을 하나로 묶거나 압축하기
+        - tar
+    - 파일 압축
+      - zip
+    - 프로세스 관련 명령
+      - 프로세스 목록 조회
+        - ps aux / pstree -alp
+      - 프로세스 종료
+        - kill 프로세스id
+      - 프로세스 이름으로 id알아내기
+        - pidof 프로세스명
+    - 시스템 관련 명령
+      - 시스템 자원 사용현황 조회
+        - top
+      - 디렉토리의 크기 조회
+        - du -s
+      - 디스크 전체 사용현황 조회
+        - df -k
+    - 네트웍 관련 명령
+      - ifconfig -> ip addr
+      - ping 000.000.000.000
+      - nslookup -> getent host
+    - 메뉴얼 페이지
+      - man wc
+      - man 2 open
+    - 명령 조합
+      - 자료 참고

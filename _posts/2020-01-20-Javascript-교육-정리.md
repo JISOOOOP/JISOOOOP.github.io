@@ -1,0 +1,112 @@
+---
+layout: post
+title:  "Javascript 교육 정리"
+date:   2020-01-20 17:56:00
+categories: study review javascript
+---
+
+# Javascript
+
+### 자바스크립트 사용
+
+- js 파일 불러오는 방식과 내부에 직접 코딩하는 방식이 있다.
+- 'use strict' : 이 파일좀 섬세하게 봐줘~
+- 스크립트와 DOM의 상용작용 시점
+  - DOM : 자바스크립트로 HTML 문서를 다룰수 있게 환경 제공 API
+  - 브라우저는 HTML 첫 줄붙 순서대로 읽음
+  - JS에 평가되는 시점에 Document에 레더링되어 있는 엘리먼트 접근 가능
+    - 선언 먼저 하고 다음 사용하는 식으로 작성(body 태그 끝으로)
+    - 이벤트를 이용하여 해결도 가능(window.onload에 함수 작성)
+- TODO 만들기
+  - DOM상의 엘리먼트 탐색
+    - getElementById  // returns HTMLElement or null
+    - getElementsByTagName // returns HTMLCollection or null
+    - getElementsByClassName // 위와 동일
+  - HTMLCollection
+    - 유사 배열 : Array와 비슷하게 사용, 하지만 Array는 아님
+      - 숫자로 인덱싱 가능, length 존재
+      - Array API 사용 불가, 사용하려면 Array로 변환
+    - live한 컬렉션 : 찾은 값이 추가되면 실시간으로 같이 추가
+  - 특정 엘리먼트의 자식엘리먼트도 검색 가능
+    - 부모를 가져다 놓고 자식들을 꺼내서 씀
+    - 부모가 삭제되도 참조가 되서 주의해야함
+  - 엘리먼트에 이벤트 헨들러 적용
+    - element.addEventListener("click", function(){
+    - }, false);
+    - 내부에서 this 사용가능(element)
+  - 엘리먼트에 이벤트 해제
+    - element.removeEventListener("click", handler, false);
+    - 함수의 참조를 저장해야함.
+    - false는 캡쳐링을 사용할지 여부
+  - 동적으로 엘리먼트 만들기
+    - document.createElement(tagName)
+    - document.createTextNode(text)
+    - 만들고 body 엘리먼트에 붙이지 않으면 나타나지 않음
+  - 엘리먼트에 자식 엘리먼트 추가하기
+    - element.appendChild(node)
+    - document.body.appendChild(newDiv);
+    - 트리구조를 생각
+  - 자식 엘리먼트 삭제하기
+    - element.removeChild(node)
+    - 지울려는 대상의 참조를 알아야 된다.
+    - 부모를 지우면 자식들까지 다 지워진다.
+  - innerHTML을 이용해 동적으로 엘리먼트 만들기
+    - element.innerHTML = '<div>text</div>'
+    - 새로운 엘리먼트들을 만드는 상황에서는 제일 빠름(엔진 내부에서 생성)
+    - DOM API보다 편한 경우가 많다.
+    - 엘리먼트에 작은 변화를 주는 경우 비효율적(둠트리 모두 지우고 다시 만듬)
+    - 값이 세팅 될 때 마다 모든 자식 엘리먼트를 지우고 다시 만들기 때문에 +=연산자를 직접사용하는 것을 피한다.(주의)
+    - HTML 스트링을 미리 만들어서 innerHTML에 넣어준다.
+  - textContent
+    - 특정 엘리먼트의 텍스트노드만 바꾸고 싶을때 사용
+    - 자식 노드들의 텍스트 들만 뽑아줌
+    - element.textCotent = 'new text node'
+    - console.log(element.textContent)
+  - 다른 DOM API 정보
+    - http://developer.mozilla.org
+    - 모르는 것 있으면 이 사이트에서 검색해보자
+  - 체크박스 다루기
+    - html 
+      - <input type="checkbox" value="someValue" checked />
+    - js
+      - input.value, checked(이거만 중요), type, focus/blur
+  - 이벤트의 전파
+    - 이벤트는 특정한 방향으로 전파된다
+      - 위에서 아래로 => Capturing
+      - 아래서 위로 => Bubbling
+      - 순서 : 캡처링 -> 실제 대상 엘리먼트 -> 버블링
+  - 이벤트의 전파 제어
+    - element.addEventListener('click', function(eventObject){
+    - eventObject.stopPropagation(); // 컵쳐링이나 버블링을 취소한다
+    - eventObject.preventDefault(); // 디폴트 동작을 취소한다.
+    - }, useCapturing);
+    - useCapturing이 true면 캡쳐링, false면 버블링
+  - CSS 제어
+    - style 어트리뷰트를 이용하여 CSS 적용
+    - 하이픈으로 이어진 속성은 카멜케이스로 변경
+    - CSS 아이디&클래스 적용
+      - element.className = 'myClass';
+      - 다중 적용 시 띄어 쓰기 = 'myClass1 myClass2'
+      - 아이디도 동일하게 적용가능 (다중 적용 x)
+      - 아이디는 하나만 명시적으로 정할 때,
+      - 클래스는 재사용성이 높음으로 많이 사용할 때?
+      - 아이디 쓸일은 드물다.!
+      - head 부분에 style 항목에 정의할 수 있다.
+        - .myClass{border:1px solid #f00}
+        - #myId{padding:5px}
+  - TODO 카운팅
+    - CSS 클래스 셀레터를 이용하여 찾는다
+    - document.querySelector('.myClass'); 1개만 찾아줌
+    - document.quertSelectorAll('.myClass'); 해당되는 모든 엘리먼트
+    - 최신브라우저들과 IE8 이상부터 지원
+  - TODO 삭제하기
+    - 엘리먼트 노드 속성
+      - 트리 형태 데이터 구조로 표현하기 위한 노드 속성
+      - element.firstChild, lastChild, parentNode, nextSibling, previousSibling, childNodes(HTMLCollection)
+  - 전체/미완/완류 뷰 구분
+    - CSS 셀렉터의 활용
+      - 완료된 Todo li에 디자인하기 위해 complete이란 클래스가 추가 되도록 작업이 되어있음
+
+- 자기실행함수 꼭 써주기(변수가 전역으로 잡히는 것을 막기위해)
+
+- 'use strict' 사용하기
